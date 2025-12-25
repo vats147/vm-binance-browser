@@ -1,0 +1,17 @@
+# Binance Browser Environment
+
+## Files to exclude from git
+node_modules/
+.DS_Store
+*.log
+.env
+.env.local
+*.pyc
+__pycache__/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db

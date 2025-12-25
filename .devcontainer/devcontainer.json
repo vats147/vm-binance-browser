@@ -1,0 +1,42 @@
+{
+    "name": "Binance Browser Environment",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": true,
+            "configureZshAsDefaultShell": true
+        }
+    },
+    "forwardPorts": [
+        6080,
+        9222,
+        5900
+    ],
+    "portsAttributes": {
+        "6080": {
+            "label": "noVNC - Browser Access",
+            "onAutoForward": "openBrowser"
+        },
+        "9222": {
+            "label": "Chrome DevTools",
+            "onAutoForward": "notify"
+        },
+        "5900": {
+            "label": "VNC Server",
+            "onAutoForward": "silent"
+        }
+    },
+    "postCreateCommand": "bash .devcontainer/setup.sh",
+    "postStartCommand": "bash start-browser.sh &",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "msjsdiag.debugger-for-chrome"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh"
+            }
+        }
+    },
+    "remoteUser": "vscode"
+}

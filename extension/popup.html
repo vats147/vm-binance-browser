@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binance Arbitrage</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 400px;
+      min-height: 500px;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #e8e8e8;
+      padding: 0;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #f0b90b 0%, #f8d12f 100%);
+      padding: 20px;
+      text-align: center;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 20px rgba(240, 185, 11, 0.3);
+    }
+    
+    .header h1 {
+      color: #1a1a2e;
+      font-size: 1.4em;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .header p {
+      color: #1a1a2e;
+      opacity: 0.8;
+      font-size: 0.85em;
+    }
+    
+    .content {
+      padding: 20px;
+    }
+    
+    .status-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+    
+    .status-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+      animation: pulse 2s infinite;
+    }
+    
+    .status-dot.inactive {
+      background: #f87171;
+      box-shadow: 0 0 10px rgba(248, 113, 113, 0.5);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .status-text {
+      font-size: 0.9em;
+      color: #a0a0a0;
+    }
+    
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .data-item {
+      background: rgba(240, 185, 11, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid rgba(240, 185, 11, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .data-item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(240, 185, 11, 0.4);
+      box-shadow: 0 4px 15px rgba(240, 185, 11, 0.2);
+    }
+    
+    .data-label {
+      font-size: 0.75em;
+      color: #a0a0a0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    
+    .data-value {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: #f0b90b;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 10px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #f0b90b 0%, #f8d12f 100%);
+      color: #1a1a2e;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(240, 185, 11, 0.4);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e8e8e8;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .table-container {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 16px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85em;
+    }
+    
+    th {
+      background: rgba(240, 185, 11, 0.2);
+      padding: 10px;
+      text-align: left;
+      font-weight: 600;
+      color: #f0b90b;
+      position: sticky;
+      top: 0;
+    }
+    
+    td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .positive {
+      color: #4ade80;
+    }
+    
+    .negative {
+      color: #f87171;
+    }
+    
+    #arbitrageData {
+      display: none;
+    }
+    
+    .loader {
+      text-align: center;
+      padding: 40px;
+      color: #a0a0a0;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(240, 185, 11, 0.2);
+      border-top-color: #f0b90b;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📊 Binance Arbitrage</h1>
+    <p>Funding Rate Arbitrage Scanner</p>
+  </div>
+  
+  <div class="content">
+    <div class="status-card">
+      <div class="status-header">
+        <div class="status-dot" id="statusDot"></div>
+        <span class="status-text" id="statusText">Connecting to Binance...</span>
+      </div>
+      
+      <div class="data-grid">
+        <div class="data-item">
+          <div class="data-label">Pairs Found</div>
+          <div class="data-value" id="pairsCount">--</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">Opportunities</div>
+          <div class="data-value" id="oppCount">--</div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="btn btn-primary" id="scanBtn">
+      🔍 Scan Arbitrage Data
+    </button>
+    
+    <button class="btn btn-secondary" id="openBinance">
+      🌐 Open Binance Page
+    </button>
+    
+    <div id="loader" class="loader" style="display: none;">
+      <div class="spinner"></div>
+      <p>Scanning funding rates...</p>
+    </div>
+    
+    <div id="arbitrageData">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Rate</th>
+              <th>APR</th>
+            </tr>
+          </thead>
+          <tbody id="dataTable">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+/* Binance Arbitrage Extension - Content Styles */
+
+/* Highlight injection for opportunities */
+.binance-arb-extension-active body {
+  /* Extension is active indicator */
+}
+
+/* Row highlighting */
+tr.binance-arb-opportunity {
+  background: linear-gradient(90deg, rgba(240, 185, 11, 0.1), transparent) !important;
+  border-left: 3px solid #f0b90b !important;
+}
+
+/* Positive rate styling */
+.binance-arb-positive {
+  color: #4ade80 !important;
+  font-weight: 600;
+}
+
+/* Negative rate styling */
+.binance-arb-negative {
+  color: #f87171 !important;
+  font-weight: 600;
+}
+
+/* High opportunity badge */
+.binance-arb-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f0b90b, #f8d12f);
+  color: #1a1a2e;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.02); }
+}
+
+/* Tooltip on hover */
+.binance-arb-tooltip {
+  position: fixed;
+  background: rgba(26, 26, 46, 0.95);
+  border: 1px solid rgba(240, 185, 11, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #e8e8e8;
+  font-size: 13px;
+  z-index: 99999;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.binance-arb-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  width: 12px;
+  height: 12px;
+  background: rgba(26, 26, 46, 0.95);
+  border-left: 1px solid rgba(240, 185, 11, 0.3);
+  border-top: 1px solid rgba(240, 185, 11, 0.3);
+  transform: rotate(45deg);
+}
