@@ -51,6 +51,22 @@ fi
 
 # Launch Chromium with Binance URL
 echo "🌍 Launching Chromium browser..."
+
+# Find the correct browser command
+if command -v chromium &> /dev/null; then
+  BROWSER_CMD="chromium"
+elif command -v chromium-browser &> /dev/null; then
+  BROWSER_CMD="chromium-browser"
+elif command -v google-chrome &> /dev/null; then
+  BROWSER_CMD="google-chrome"
+elif [ -x "/usr/local/bin/browser" ]; then
+  BROWSER_CMD="/usr/local/bin/browser"
+else
+  echo "❌ No browser found! Installing chromium..."
+  sudo snap install chromium 2>/dev/null || sudo apt install -y chromium 2>/dev/null
+  BROWSER_CMD="chromium"
+fi
+
 CHROMIUM_ARGS=(
   "--no-sandbox"
   "--disable-dev-shm-usage"
@@ -70,7 +86,7 @@ fi
 # Add the Binance URL
 CHROMIUM_ARGS+=("https://www.binance.com/en-IN/futures/funding-history/perpetual/arbitrage-data")
 
-chromium-browser "${CHROMIUM_ARGS[@]}" &
+$BROWSER_CMD "${CHROMIUM_ARGS[@]}" &
 
 echo ""
 echo "✅ Browser environment started!"
