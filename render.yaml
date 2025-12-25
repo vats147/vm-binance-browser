@@ -1,0 +1,14 @@
+# Render.com Configuration
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: binance-browser
+    runtime: docker
+    region: singapore
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DISPLAY
+        value: ":99"
+    healthCheckPath: /
