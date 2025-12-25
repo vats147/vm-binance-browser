@@ -31,6 +31,10 @@ sleep 1
 
 # Start noVNC (web-based VNC client)
 echo "🌐 Starting noVNC web client on port 6080..."
+# Create index redirect if not exists
+if [ -d "/usr/share/novnc" ] && [ ! -f "/usr/share/novnc/index.html" ]; then
+  echo '<html><head><meta http-equiv="refresh" content="0;url=vnc.html?autoconnect=true&resize=scale"></head></html>' | sudo tee /usr/share/novnc/index.html > /dev/null
+fi
 websockify --web=/usr/share/novnc 6080 localhost:5900 &
 sleep 1
 
